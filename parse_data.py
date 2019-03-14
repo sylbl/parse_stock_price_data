@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import numpy as np
 
 dataDirPath = "/Users/s1830409/Google ドライブ/過去データ"
 
