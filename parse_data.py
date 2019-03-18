@@ -69,8 +69,19 @@ for code in nk225list.index:
     i += 1
     sum225 += datas[code].loc[d, 'PX_LAST'] * 50 * nk225list.loc[code, '/倍率'] / nk225list.loc[code, 'みなし額面']
 
-    #print(code + ": " + str(datas[code].loc[d, 'PX_LAST']))
 
 print("correct: " + str(datas['NKY'].loc[d, 'PX_LAST']))
 print(str(i) + ": " + str(sum225 / 27.003))
-#print("error: " + str(sum225/27.003 / datas['NKY'].loc[d, 'PX_LAST']))
+
+# date range
+stDate = '2019-01-04'
+edDate = '2019-03-15'
+
+# marge datas
+oData = datas['NKY'][stDate:edDate].rename(columns={'PX_LAST':'NKY'})
+for code in nk225list.index:
+    oData = oData.join(datas[code][stDate:edDate].rename(columns={'PX_LAST':code}))
+
+# output datas
+print(oData)
+oData.to_csv(dataDirPath + '/nk225datas.csv')
