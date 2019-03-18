@@ -18,11 +18,12 @@ nonData = []
 for stockCode in nk225list.index:
 
     # 存在チェック
-    if os.path.exists(dataDirPath+"/TPX100/"+stockCode+".csv"):
+    '''if os.path.exists(dataDirPath+"/TPX100/"+stockCode+".csv"):
         dataFilePath = dataDirPath+"/TPX100/"+stockCode+".csv"
     elif os.path.exists(dataDirPath+"/TPX400/"+stockCode+".csv"):
         dataFilePath = dataDirPath+"/TPX400/"+stockCode+".csv"
-    elif os.path.exists(dataDirPath+"/NKY/"+stockCode+".csv"):
+    elif '''
+    if os.path.exists(dataDirPath+"/NKY/"+stockCode+".csv"):
         dataFilePath = dataDirPath+"/NKY/"+stockCode+".csv"
     else:
         nonData.append(stockCode)
@@ -57,3 +58,19 @@ df.set_index('Date', inplace=True)
 
 # store lists
 datas['NKY'] = df
+
+
+
+# check
+d = '2019-01-04'
+i = 0
+sum225 = 0
+for code in nk225list.index:
+    i += 1
+    sum225 += datas[code].loc[d, 'PX_LAST'] * 50 * nk225list.loc[code, '/倍率'] / nk225list.loc[code, 'みなし額面']
+
+    #print(code + ": " + str(datas[code].loc[d, 'PX_LAST']))
+
+print("correct: " + str(datas['NKY'].loc[d, 'PX_LAST']))
+print(str(i) + ": " + str(sum225 / 27.003))
+#print("error: " + str(sum225/27.003 / datas['NKY'].loc[d, 'PX_LAST']))
