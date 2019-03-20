@@ -20,7 +20,7 @@ if __name__ == '__main__':
     # Minimize
     hAnswer = tf.placeholder(tf.float64)
     loss = tf.reduce_mean(tf.square(model - hAnswer))
-    optimizer = tf.train.GradientDescentOptimizer(0.5)
+    optimizer = tf.train.GradientDescentOptimizer(0.000001)
     train = optimizer.minimize(loss)
     
 
@@ -31,7 +31,7 @@ if __name__ == '__main__':
     sess = tf.Session()
     sess.run(init)
 
-    for step in range(100000):
+    for step in range(100):
         
         for date in data.membersData.index:
             line = data.membersData.loc[date].values
@@ -39,11 +39,8 @@ if __name__ == '__main__':
 
             sess.run(train, feed_dict={ hPrice: line,
                                         hAnswer: answer})
-            '''
-            result = sess.run(vD, feed_dict={hPrice: line,
-                                            hAnswer: answer})
-            '''
-            #print(date, result, answer)
+            
+            print(sess.run(vD), sess.run(loss, feed_dict={hPrice:line, hAnswer:answer}), answer)
 
         if step % 100 == 0:
             print(step, sess.run(vD))
