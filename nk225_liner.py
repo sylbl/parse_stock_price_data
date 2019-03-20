@@ -55,9 +55,9 @@ if __name__ == "__main__":
     vD = tf.Variable(27.00, dtype=tf.float64)
 
     # モデル＝株価 * vM / vD
-    model = tf.convert_to_tensor(df225.membersData)
-    model = model * tf.convert_to_tensor(df225.minashiF)
-    #model = tf.convert_to_tensor(df225.membersData) * vM / vD
+    #model = tf.convert_to_tensor(df225.membersData)
+    #model = model * tf.convert_to_tensor(df225.minashiF)
+    model = tf.convert_to_tensor(df225.membersData) * vM
     model = tf.reduce_sum(tf.transpose(model), 0) / vD
     #model = tf.round(model * 100) / 100
     
@@ -66,7 +66,7 @@ if __name__ == "__main__":
     # Minimize
     answer = tf.convert_to_tensor(df225.indexData)
     loss = tf.reduce_mean(tf.square(model - answer))
-    optimizer = tf.train.GradientDescentOptimizer(0.5)
+    optimizer = tf.train.GradientDescentOptimizer(0.000002)
     train = optimizer.minimize(loss)
     
 
@@ -83,11 +83,13 @@ if __name__ == "__main__":
 
     
     # Fitting
-    for step in range(20001):
+    for step in range(2000001):
         sess.run(train)
         if step % 100 == 0:
             print(step, sess.run(vD), sess.run(loss))
     print(sess.run(model))
+    print(df225.indexData.values)
+    print(sess.run(vM) / (sess.run(vD) / df225.DIVISOR))
 
     # close
     sess.close()
