@@ -9,7 +9,7 @@ if __name__ == '__main__':
 
     # 除数を学習
     # 除数
-    vD = tf.Variable(20, dtype=tf.float64)
+    vD = tf.Variable(225, dtype=tf.float64)
     # 株価
     hPrice = tf.placeholder(tf.float64, [len(data.minashiF)])
     # モデル構築
@@ -40,7 +40,7 @@ if __name__ == '__main__':
             sess.run(train, feed_dict={ hPrice: line,
                                         hAnswer: answer})
             
-            print(sess.run(vD), sess.run(loss, feed_dict={hPrice:line, hAnswer:answer}), answer)
+            print(step, sess.run(vD), sess.run(loss, feed_dict={hPrice:line, hAnswer:answer}), answer)
 
         if step % 100 == 0:
             print(step, sess.run(vD))
