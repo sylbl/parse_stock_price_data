@@ -29,7 +29,8 @@ class DfNk225:
     def minashiF(self):
         return (50 * self.minashi['/倍率'] / self.minashi['みなし額面'])
     
-    def makeOrigin225(self, startDate, endDate):
+    def makeOrigin225(self, startDate, endDate, minashiArr):
+
 
         oData = pd.DataFrame()
 
@@ -51,8 +52,8 @@ class DfNk225:
             oData = pd.concat([oData, df[startDate:endDate]], axis=1)
 
         # calc225
-        ori225 = round((oData * self.minashiF).sum(axis=1) / self.DIVISOR, 2)
-        ori225.columns = ['NKY']
+        ori225 = round((oData * minashiArr).sum(axis=1) / self.DIVISOR, 2)
+        ori225.name = 'NK'
 
         oData = pd.concat([ori225, oData], axis=1)
         return (oData)
@@ -64,7 +65,7 @@ if __name__ == '__main__':
     sDate = '2018/10/01'
     eDate = '2019/03/15'
 
-    data = dk.makeOrigin225(sDate, eDate)
+    data = dk.makeOrigin225(sDate, eDate, dk.minashiF)
     print(data)
     data.to_csv(dk.DATA_DIR_PATH+"origin225.csv")
 
