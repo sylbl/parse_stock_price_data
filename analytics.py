@@ -51,7 +51,7 @@ def err():
 
     #in-sample range
     sDate = "2019-01-04"
-    eDate = "2019-03-15"
+    eDate = "2019-03-14"
 
 
     for col in data.iloc[:,1:].columns.values:
@@ -68,7 +68,73 @@ def err():
         print("[out]" + col + ":", end="")
         print(str(er) + " >" + str(np.sqrt(er)))
 
+def vol():
 
+    lm = pd.read_csv("/Users/s1830409/Google ドライブ/outputData/minashi-learn.csv")
+    lm.set_index('コード', inplace=True)
+
+    nk225 = n225.DfNk225()
+
+    # 日次リターン
+    nk225.data = nk225.data.pct_change()
+    nk225.data.fillna(0, inplace=True)
+
+    # ボラティリティ
+    vol = nk225.data.std() * np.sqrt(250)
+
+    # err比率
+    rat = lm['100000'] / lm['answer']
+
+    plt.scatter(rat, vol[1:])
+    plt.yscale('log')
+    plt.xscale('log')
+    plt.show()
+
+def val():
+
+    lm = pd.read_csv("/Users/s1830409/Google ドライブ/outputData/minashi-learn.csv")
+    lm.set_index('コード', inplace=True)
+
+    nk225 = n225.DfNk225()
+
+    # 株価水準
+    val = nk225.data.mean()
+
+    # err比率
+    rat = lm['100000'] / lm['answer']
+
+    
+    plt.scatter(rat, val[1:])
+    plt.yscale('log')
+    plt.xscale('log')
+    plt.show()
+    
+def volval():
+
+    lm = pd.read_csv("/Users/s1830409/Google ドライブ/outputData/minashi-learn.csv")
+    lm.set_index('コード', inplace=True)
+
+    nk225 = n225.DfNk225()
+
+    # 株価水準
+    val = nk225.data.mean()
+
+    # 日次リターン
+    nk225.data = nk225.data.pct_change()
+    nk225.data.fillna(0, inplace=True)
+
+    # ボラティリティ
+    vol = nk225.data.std() * np.sqrt(250)
+
+    volval = vol * val
+
+    # err比率
+    rat = lm['100000'] / lm['answer']
+
+    plt.scatter(rat, volval[1:])
+    plt.yscale('log')
+    plt.xscale('log')
+    plt.show()
 
 
 
@@ -79,5 +145,8 @@ def err():
 if __name__ == '__main__':
 
     #track()
-    err()
+    #err()
+    #vol()
+    #val()
+    volval()
 
